@@ -10,28 +10,25 @@ module.exports = {
       });
 
       if (!user) {
-        const err = new Error("Invalid username or password");
+        const err = new Error();
+        err.message = "Invalid username or password";
         err.status = 401;
-        console.log(err);
         throw err;
       }
       const isValid = bcrypt.compareSync(password, user.password);
 
-      if(!isValid) {
-        const err = new Error("Invalid username or password");
+      if (!isValid) {
+        const err = new Error();
         err.status = 401;
-        console.log(err);
+        err.message = "Invalid username or password";
         throw err;
       }
-     const accessToken = user.getToken()
-     const userData = user.toObject()
-     delete userData.password
-     return {accessToken, user:userData}
+      const accessToken = user.getToken();
+      const userData = user.toObject();
+      delete userData.password;
+      return { accessToken, user: userData };
     } catch (error) {
-         res.status(error.status).send({
-          status: error.status,
-          message: error.message,
-        });
+      throw error
     }
   },
 };

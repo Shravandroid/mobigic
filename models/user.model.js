@@ -24,17 +24,14 @@ userSchema.pre("save", function (next) {
   next();
 });
 
-userSchema.methods.getToken =  function () {
- 
-   return jwt.sign(
+userSchema.methods.getToken = function () {
+  return jwt.sign(
     { username: this.username, sub: this._id, isActive: this.isActive },
     process.env.JWT_PRIVATE_KEY,
-  
+    { expiresIn: "2w" }
   );
 };
 
-
 const userModel = mongoose.model("User", userSchema);
-
 
 module.exports = userModel;
