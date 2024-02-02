@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 function auth(req, res, next) {
   const excludeRoutes = ["/users", "/login"];
-  if (req.method == "POST" && excludeRoutes.includes(req.url)) {
+  if ((req.method == "POST" && excludeRoutes.includes(req.url)|| req.url == "/")) {
     next();
   } else {
     const token = req.headers.authorization || req.headers.Authorization;
