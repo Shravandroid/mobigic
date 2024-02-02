@@ -9,7 +9,7 @@ function auth(req, res, next) {
     if (!token) {
       res.status(401).send({ message: "Unauthorized" });
     }
-    const tokenString = token.split(" ")[1];
+    const tokenString = token.match(/^Bearer (.+)$/)?.[1];
 
     try {
       const tokenPayload = jwt.verify(tokenString, process.env.JWT_PRIVATE_KEY);
