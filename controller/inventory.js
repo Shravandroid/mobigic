@@ -3,6 +3,7 @@ const inventoryService = require("../service/inventory.service");
 const router = express.Router();
 const multer = require("multer");
 const fs = require("fs");
+const { auth } = require("../utils/auth");
 
 const path = "uploads/inventory";
 const storage = multer.diskStorage({
@@ -44,7 +45,7 @@ router.post(
   async (req, res, next) => {
     try {
       const inventory = await inventoryService.create(req, res);
-      return res.status(201).send({ data: inventory });
+      return res.status(201).send({ data: inventory ,message:"File uploaded successfully!", status: 201});
     } catch (error) {
       return res.status(error?.status).send(error);
     }
@@ -66,6 +67,19 @@ router.delete("/:id", async (req, res, next) => {
     return res.status(200).send({ data: deletedFile });
   } catch (error) {
     return res.status(error?.status || 500).send(error);
+  }
+});
+
+router.get("/", auth, async (req, res, next) => {
+  try {
+    const userId = req.userId;
+
+    const inventory = await inventoryService.getInventoryByUserId(userId);
+
+    return res.status(200).send(inventory);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({ error: "Internal Server Error" });
   }
 });
 

@@ -53,7 +53,13 @@ router.post("/", validate(userValidationSchema), async (req, res, next) => {
       confirmPassword,
     });
 
-    return res.status(201).send(createdUser);
+    return res
+      .status(201)
+      .send({
+        status: 201,
+        message: "User created successfully",
+        data: { createdUser },
+      });
   } catch (error) {
     return res.status(error.status).send(error);
   }

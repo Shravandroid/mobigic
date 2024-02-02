@@ -42,7 +42,6 @@ app.listen(PORT, () => {
 module.exports = app;
 
 function errorHandler(err, req, res, next) {
-  console.log("AALA");
   const statusCode = err.status ?? 500;
   return res.status(statusCode ?? 500).json({
     error: statusCode,

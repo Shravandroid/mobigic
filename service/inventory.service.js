@@ -57,13 +57,13 @@ module.exports = {
         throw error;
       }
       if (document.path) {
-        fs.unlink(document.path.substring(1,), (err) => {
+        fs.unlink(document.path.substring(1), (err) => {
           if (err) {
             console.log(err);
           }
         });
       }
-      return {data: null, message: 'File deleted successfully!'};
+      return { data: null, message: "File deleted successfully!", status: 204 };
     } catch (error) {
       throw error;
     }
@@ -78,6 +78,20 @@ module.exports = {
       return true;
     } catch (error) {
       throw error;
+    }
+  },
+  async getInventoryByUserId(userId) {
+    try {
+      const inventory = await InventoryModel.find({ uploadedBy: userId, isActive: true });
+
+      if (inventory.length === 0) {
+        return { status: 404, message: "No files found for this user" };
+      }
+
+      return inventory;
+    } catch (error) {
+      console.error(error);
+      throw { status: 500, error: "Internal Server Error" };
     }
   },
 };
